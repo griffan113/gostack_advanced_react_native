@@ -1,5 +1,10 @@
 import { useField } from '@unform/core';
-import React, { useEffect, useRef } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import { TextInputProps } from 'react-native';
 
 import { Container, TextInput, Icon } from './styles';
@@ -13,7 +18,14 @@ interface InputValueReference {
   value: string;
 }
 
-const Input: React.FC<InputProps> = ({ name, icon, ...props }) => {
+interface InputRef {
+  focus(): void;
+}
+
+const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
+  { name, icon, ...props },
+  ref,
+) => {
   const inputElementRef = useRef<any>(null);
 
   const { registerField, error, defaultValue = '', fieldName } = useField(name);
@@ -36,6 +48,12 @@ const Input: React.FC<InputProps> = ({ name, icon, ...props }) => {
     });
   }, [fieldName, registerField]);
 
+  useImperativeHandle(ref, () => ({
+    focus() {
+      inputElementRef.current.focus();
+    },
+  }));
+
   return (
     <Container>
       <Icon name={icon} size={20} color="#666360" />
@@ -54,4 +72,4 @@ const Input: React.FC<InputProps> = ({ name, icon, ...props }) => {
   );
 };
 
-export default Input;
+export default forwardRef(Input);

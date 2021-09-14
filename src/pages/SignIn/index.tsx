@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
@@ -25,21 +26,18 @@ import Input from '../../components/Input';
 import Buttom from '../../components/Button';
 
 const SignIn: React.FC = () => {
+  const passwordInputRef = useRef<TextInput>(null);
   const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
 
   const handleSignIn = useCallback(
     (data: object) => {
-      console.log('a');
-
       console.log(data);
     },
     [formRef],
   );
 
   const handleSubmit = useCallback(() => {
-    console.log('faafas');
-
     formRef.current?.submitForm();
   }, []);
 
@@ -60,8 +58,24 @@ const SignIn: React.FC = () => {
               <Title>Faça seu logon</Title>
             </View>
             <Form ref={formRef} onSubmit={handleSignIn}>
-              <Input name="email" icon="mail" placeholder="E-mail" />
-              <Input name="password" icon="lock" placeholder="Senha" />
+              <Input
+                autoCorrect={false}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                name="email"
+                icon="mail"
+                placeholder="E-mail"
+                onSubmitEditing={() => passwordInputRef.current?.focus()}
+              />
+              <Input
+                ref={passwordInputRef}
+                secureTextEntry
+                name="password"
+                icon="lock"
+                placeholder="Senha"
+                returnKeyType="next"
+                onSubmitEditing={handleSubmit}
+              />
             </Form>
             <Buttom onPress={handleSubmit}>Entrar</Buttom>
             <ForgotPassword onPress={() => {}}>
