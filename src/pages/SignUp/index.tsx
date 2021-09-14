@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Image,
   View,
@@ -13,10 +13,18 @@ import logoImage from '../../assets/logo.png';
 
 import { Container, Title, BackToSignIn, BackToSignInText } from './styles';
 import Input from '../../components/Input';
-import Buttom from '../../components/Buttom';
+import Button from '../../components/Button';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
 
 const SignIn: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
+
   const navigation = useNavigation();
+
+  const handleSignUp = useCallback(data => {
+    console.log(data);
+  }, []);
 
   return (
     <>
@@ -34,13 +42,20 @@ const SignIn: React.FC = () => {
             <View>
               <Title>Crie sua conta</Title>
             </View>
-            <Input name="name" icon="user" placeholder="Nome" />
+            <Form ref={formRef} onSubmit={handleSignUp}>
+              <Input name="name" icon="user" placeholder="Nome" />
 
-            <Input name="email" icon="mail" placeholder="E-mail" />
+              <Input name="email" icon="mail" placeholder="E-mail" />
 
-            <Input name="password" icon="lock" placeholder="Senha" />
-
-            <Buttom onPress={() => {}}>Entrar</Buttom>
+              <Input name="password" icon="lock" placeholder="Senha" />
+            </Form>
+            <Button
+              onPress={() => {
+                formRef.current?.submitForm();
+              }}
+            >
+              Entrar
+            </Button>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>

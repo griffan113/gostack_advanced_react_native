@@ -18,11 +18,11 @@ import {
   Title,
   ForgotPassword,
   ForgotPasswordText,
-  CreateAccountButtom,
-  CreateAccountButtomText,
+  CreateAccountButton,
+  CreateAccountButtonText,
 } from './styles';
 import Input from '../../components/Input';
-import Buttom from '../../components/Buttom';
+import Buttom from '../../components/Button';
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
@@ -30,10 +30,18 @@ const SignIn: React.FC = () => {
 
   const handleSignIn = useCallback(
     (data: object) => {
+      console.log('a');
+
       console.log(data);
     },
     [formRef],
   );
+
+  const handleSubmit = useCallback(() => {
+    console.log('faafas');
+
+    formRef.current?.submitForm();
+  }, []);
 
   return (
     <>
@@ -51,18 +59,11 @@ const SignIn: React.FC = () => {
             <View>
               <Title>Faça seu logon</Title>
             </View>
-            <Form onSubmit={handleSignIn}>
+            <Form ref={formRef} onSubmit={handleSignIn}>
               <Input name="email" icon="mail" placeholder="E-mail" />
               <Input name="password" icon="lock" placeholder="Senha" />
             </Form>
-            <Buttom
-              onPress={() => {
-                console.log('dadasdasdad');
-                formRef.current?.submitForm();
-              }}
-            >
-              Entrar
-            </Buttom>
+            <Buttom onPress={handleSubmit}>Entrar</Buttom>
             <ForgotPassword onPress={() => {}}>
               <ForgotPasswordText>Esqueci a senha</ForgotPasswordText>
             </ForgotPassword>
@@ -70,10 +71,10 @@ const SignIn: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
       {/* @ts-ignore */}
-      <CreateAccountButtom onPress={() => navigation.navigate('SignUp')}>
+      <CreateAccountButton onPress={() => navigation.navigate('SignUp')}>
         <Icon name="log-in" size={20} color="#ff9000" />
-        <CreateAccountButtomText>Criar uma conta</CreateAccountButtomText>
-      </CreateAccountButtom>
+        <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
+      </CreateAccountButton>
     </>
   );
 };
